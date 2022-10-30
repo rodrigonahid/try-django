@@ -1,0 +1,14 @@
+{% extends "base.html" %} {% block content %}
+
+<br />
+<ul>
+  {% for x in object %}
+  <li>
+    <h1>Articles</h1>
+    <h2>{{x.title}}</h2>
+    <p>{{x.content}}</p>
+    <a href="/articles/{{x.id}}">Go to article</a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock content %}

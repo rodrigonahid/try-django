@@ -1,0 +1,12 @@
+{% extends "base.html" %} {% block content %}
+<a href="/articles/create">Create article</a>
+<br />
+<ul>
+  <li>
+    <h1>Articles</h1>
+    <h2>{{object.title}}</h2>
+    <p>{{object.content}}</p>
+    <a href="/articles/{{x.id}}">Go to article</a>
+  </li>
+</ul>
+{% endblock %}

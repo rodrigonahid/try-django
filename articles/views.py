@@ -8,28 +8,31 @@ from .forms import ArticleForm
 from .models import Article
 
 def article_search_view(request):
+    query_dict = request.GET # this is a dictionary
+    # query = query_dict.get("q") # <input type='text' name='q' />
     try:
-        query_dict = Number(request.GET.get("q"))
+        query = int(query_dict.get("q"))
     except:
-        query_dict = None
-
+        query = None
     article_obj = None
-    if query_dict is not None:
-        article_obj = Article.objects.get(id=query_dict)
+    print("query", query)
+    if query is not None:
+        article_obj = Article.objects.get(id=query)
+        context = {
+            "object": article_obj
+        }
+        return render(request, "articles/search.html", context=context)
 
-    context = {
-        object: article_obj,
-    }
-    return render(request, 'articles/search.html', context=context)
+    if query is None:
+        article_obj = Article.objects.all()
+        context = {
+            "object": article_obj
+        }
+        return render(request, "articles/main.html", context=context)
+        
 
-def article_view(request):
-    articles = Article.objects.all()
-    print(articles)
-    context = {
-       "articles": articles
-    }
+   
 
-    return render(request, "articles/main.html", context=context)
 
 def article_details_view(request, id=None):
     article_obj = None

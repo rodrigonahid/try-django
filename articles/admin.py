@@ -3,10 +3,7 @@ from .models import Article
 
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'timestamp']
+    list_display = ['id', 'title', 'slug', 'timestamp']
     search_fields = ['title', 'content']
     
-   
-
-
 admin.site.register(Article)

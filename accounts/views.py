@@ -4,7 +4,6 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 def login_view(request):
     form = AuthenticationForm(request, data=request.POST)
-    print(dir(form))
     if form.is_valid():
         user = form.get_user()
         login(request, user)

@@ -3,6 +3,7 @@ from numbers import Number
 from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from .forms import ArticleForm
 
 from .models import Article
@@ -15,7 +16,6 @@ def article_search_view(request):
     except:
         query = None
     article_obj = None
-    print("query", query)
     if query is not None:
         article_obj = Article.objects.get(id=query)
         context = {
@@ -30,14 +30,16 @@ def article_search_view(request):
         }
         return render(request, "articles/main.html", context=context)
         
-
-   
-
-
-def article_details_view(request, id=None):
+def article_details_view(request, slug=None):
     article_obj = None
-    if id is not None:
-        article_obj = Article.objects.get(id=id)
+    if slug is not None:
+        try:
+            article_obj = Article.objects.get(slug=slug)
+            print(article_obj)
+        except Article.MultipleObjectsReturned:
+            article_obj = Article.object.filter(slug=slug).first()
+        except:
+            raise Http404
 
     context = {
         "object": article_obj,

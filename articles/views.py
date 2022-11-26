@@ -1,6 +1,3 @@
-from multiprocessing import context
-from numbers import Number
-from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
@@ -8,20 +5,21 @@ from .forms import ArticleForm
 
 from .models import Article
 
-def article_search_view(request):
+def article_view(request):
     query_dict = request.GET # this is a dictionary
     # query = query_dict.get("q") # <input type='text' name='q' />
     try:
-        query = int(query_dict.get("q"))
+        query = query_dict.get("q")
     except:
         query = None
     article_obj = None
+    print(query)
     if query is not None:
-        article_obj = Article.objects.get(id=query)
+        qs = Article.objects.search(query)
         context = {
-            "object": article_obj
+            "object": qs
         }
-        return render(request, "articles/search.html", context=context)
+        return render(request, "articles/main.html", context=context)
 
     if query is None:
         article_obj = Article.objects.all()

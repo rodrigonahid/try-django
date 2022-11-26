@@ -1,8 +1,15 @@
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.utils import timezone
-from django.urls import reverse
+from django.db.models import Q
+
 from .utils import slugify_instance_title
+
+class ArticleManager(models.Manager):
+    def search(self, query):
+        lookups = Q(title__icontains=query) | Q(content__icontains=query)
+        return Article.objects.filter(lookups)
+
 class Article(models.Model):
     title = models.CharField(max_length=128)
     slug = models.SlugField(unique=True, blank=True, null=True)
@@ -10,6 +17,8 @@ class Article(models.Model):
     timestamp = models.DateTimeField(default=timezone.now)
     updated_at= models.DateTimeField(auto_now=True)
     publish = models.DateField(auto_now_add=False, auto_now=False, null=True, blank=True)
+
+    objects=ArticleManager()
 
     def __str__(self):
         return self.title

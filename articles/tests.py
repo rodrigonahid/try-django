@@ -41,3 +41,10 @@ class ArticleTestCase(TestCase):
         unique_slugs = list(set(new_slugs))
         self.assertEqual(len(new_slugs), len(unique_slugs))
         
+    def test_query_search(self):
+        articles = Article.objects.search(query="Hello world")
+        self.assertEqual(len(articles), self.number_of_articles)
+        articles = Article.objects.search(query="Hello")
+        self.assertEqual(len(articles), self.number_of_articles)
+        articles = Article.objects.search(query="That's the content")
+        self.assertEqual(len(articles), self.number_of_articles)
